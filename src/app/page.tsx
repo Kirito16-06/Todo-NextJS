@@ -1,9 +1,14 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 
-const App = () => {
-    const [userInput, setUserInput] = useState('');
-    type TodoItem = { id: number; value: string };
+interface TodoItem {
+    id: string;
+    value: string;
+}
+
+export default function Page() {
+    const [userInput, setUserInput] = useState<string>('');
+    type TodoItem = { id: string | number; value: string };
     const [list, setList] = useState<TodoItem[]>([]);
     const [editIndex, setEditIndex] = useState<number | null>(null); // Track index of item to edit
 
@@ -21,10 +26,9 @@ const App = () => {
     }, [list]);
 
     // Set a user input value
-    const updateInput = (value: React.SetStateAction<string>) => {
-        setUserInput(value);
+    const updateInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setUserInput(e.target.value);
     };
-
     const handleAction = () => {
         if (userInput.trim() === '') return; // Avoid adding empty items
 
@@ -39,8 +43,9 @@ const App = () => {
             setEditIndex(null); // Reset edit mode
         } else {
             // Add new item
+            // Use a better ID generator
             const newItem = {
-                id: Math.random(), // Consider using a more reliable ID generator
+                id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Math.random(),
                 value: userInput,
             };
             setList([...list, newItem]);
@@ -50,7 +55,8 @@ const App = () => {
     };
 
     // Function to delete item from list using id to delete
-    const deleteItem = (id: any) => {
+    // Type the deleteItem function
+    const deleteItem = (id: number | string) => {
         const updatedList = list.filter((item) => item.id !== id);
         setList(updatedList);
     };
@@ -122,7 +128,7 @@ const App = () => {
                         }}
                         placeholder={editIndex !== null ? 'Edit item...' : 'Add item...'}
                         value={userInput}
-                        onChange={(e) => updateInput(e.target.value)}
+                        onChange={updateInput}
                     />
                     <button
                         style={{
@@ -205,6 +211,4 @@ const App = () => {
             </div>
         </div>
     );
-};
-
-export default App;
+}

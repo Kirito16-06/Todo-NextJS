@@ -1,13 +1,18 @@
 'use client';
 import React, { useState } from 'react';
 
+type TodoItem = {
+    id: number;
+    value: string;
+};
+
 const App = () => {
-    const [userInput, setUserInput] = useState('');
-    const [list, setList] = useState([]);
-    const [editIndex, setEditIndex] = useState(null); // Track index of item to edit
+    const [userInput, setUserInput] = useState<string>('');
+    const [list, setList] = useState<TodoItem[]>([]);
+    const [editIndex, setEditIndex] = useState<number | null>(null); // Track index of item to edit
 
     // Set a user input value
-    const updateInput = (value) => {
+    const updateInput = (value: string) => {
         setUserInput(value);
     };
 
@@ -35,13 +40,13 @@ const App = () => {
     };
 
     // Function to delete item from list using id to delete
-    const deleteItem = (id) => {
+    const deleteItem = (id: number) => {
         const updatedList = list.filter((item) => item.id !== id);
         setList(updatedList);
     };
 
     // Function to enable editing mode
-    const startEdit = (index) => {
+    const startEdit = (index: number) => {
         setUserInput(list[index].value);
         setEditIndex(index); // Set the index of the item to be edited
     };
