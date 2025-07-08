@@ -1,10 +1,14 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+// Define the TodoItem interface
+// This interface describes the structure of a todo item        
 
 interface TodoItem {
     id: string;
     value: string;
 }
+
+
 
 export default function Page() {
     const [userInput, setUserInput] = useState<string>('');
